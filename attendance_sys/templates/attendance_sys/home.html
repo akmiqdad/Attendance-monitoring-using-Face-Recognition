@@ -16,8 +16,8 @@
     <div class="row">
         <div class="col-md-6" style="margin-top: 20px;">
             <div class="card card-body">
-                <center><h3>Take Attendence</h3></center>
-                <form class="form-horizontal" action="{% url 'attendence' %}" method="POST">
+                <center><h3>Take Attendance</h3></center>
+                <form class="form-horizontal" action="{% url 'attendance' %}" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="sel1">Select Branch:</label>
@@ -58,7 +58,7 @@
                             <option value="7">7</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-block btn-info">Take Attendence</button>
+                    <button type="submit" class="btn btn-block btn-info">Take Attendance</button>
                 </form>
             </div>
         </div>
@@ -105,7 +105,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="sel1">Select Division:</label>
-                                {{ studentForm.division }}
+                                {{ studentForm.section }}
                             </div>
                         </div>
                     </div>
@@ -153,8 +153,8 @@
         </div>
         <div class="col-md-6" style="margin-top: 20px;;">
             <div class="card card-body">
-                <h3>Search Attendence</h3></center>
-                    <a href="{% url 'searchattendence' %}" class="btn btn-block btn-info">Click Here</a>
+                <h3>Search Attendance</h3></center>
+                    <a href="{% url 'searchattendance' %}" class="btn btn-block btn-info">Click Here</a>
             </div>
         </div>
     </div>

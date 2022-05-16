@@ -182,3 +182,38 @@ def facultyProfile(request):
 
 # def getVideo(request):
 #     return render(request, 'attendance_sys/videoFeed.html')
+@login_required()
+def add_student(request):
+    # If the user is not admin, they will be redirected to home
+    # if not request.user.is_superuser:
+    #     return redirect("/")
+
+    if request.method == 'POST':
+        # Retrieving all the form data that has been inputted
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        registration_id = request.POST['registration_id']
+        branch = request.POST['branch']
+        year = request.POST['year']
+        section = request.POST['section'] 
+        profile_pic = request.POST['profile_pic'] 
+
+        user = User.objects.create_user(
+            username=registration_id,
+            password=registration_id
+        )
+        user.save()
+
+        # Creating a new student instance with given data and saving it.
+        Student(
+            firstname=firstname,
+            lastname=lastname,
+            registration_id=registration_id,
+            branch=branch,
+            year=year,
+            section=section,
+            profile_pic=profile_pic,
+        ).save()
+        return redirect('/home')
+    context = {}
+    return render(request, 'attendance_sys/add_student.html', context)
