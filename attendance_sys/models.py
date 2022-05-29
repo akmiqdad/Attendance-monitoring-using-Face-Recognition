@@ -25,9 +25,9 @@ class Faculty(models.Model):
 
 def student_directory_path(instance, filename): 
     name, ext = filename.split(".")
-    name = instance.registration_id # + "_" + instance.branch + "_" + instance.year + "_" + instance.section
+    name = instance.registration_id # + "_" + instance.branch + "_" + instance.year + "_" + instance.division
     filename = name +'.'+ ext 
-    return 'Student_Images/{}/{}/{}/{}'.format(instance.branch,instance.year,instance.section,filename)
+    return 'Student_Images/{}/{}/{}/{}'.format(instance.branch,instance.year,instance.division,filename)
 
 class Student(models.Model):
 
@@ -49,19 +49,21 @@ class Student(models.Model):
         ('A','A'),
         ('B','B'),
     )
-
     firstname = models.CharField(max_length=200, null=True, blank=True)
     lastname = models.CharField(max_length=200, null=True, blank=True)
-    # registration_id = models.CharField(max_length=200, null=True)
-    registration_id = models.OneToOneField(User, null = True, blank = True, on_delete= models.CASCADE)
+    registration_id = models.CharField(max_length=200, null=True)
+    # registration_id = models.OneToOneField(User, null = True, on_delete= models.CASCADE)
     branch = models.CharField(max_length=100, null=True, choices=BRANCH)
     year = models.CharField(max_length=100, null=True, choices=YEAR)
-    section = models.CharField(max_length=100, null=True, choices=DIVISION)
+    division = models.CharField(max_length=100, null=True, choices=DIVISION)
     profile_pic = models.ImageField(upload_to=student_directory_path ,null=True, blank=True)
 
 
+
+    # objects = CustomUserManager()
+
     def __str__(self):
-        return str(self.registration_id,self.firstname+" "+self.lastname,self.year,self.branch)
+        return str(self.registration_id)
 
 class Attendence(models.Model):
     # faculty = models.ForeignKey(Faculty, null = True, on_delete= models.SET_NULL)
@@ -72,7 +74,7 @@ class Attendence(models.Model):
     time = models.TimeField(auto_now_add=True, null = True)
     branch = models.CharField(max_length=200, null = True)
     year = models.CharField(max_length=200, null = True)
-    section = models.CharField(max_length=200, null = True)
+    division = models.CharField(max_length=200, null = True)
     period = models.CharField(max_length=200, null = True)
     status = models.CharField(max_length=200, null = True, default='Absent')
 
