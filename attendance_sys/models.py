@@ -1,26 +1,31 @@
 from __future__ import division
 from django.db import models
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    is_faculty = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
 
 
 def user_directory_path(instance, filename): 
     name, ext = filename.split(".")
-    name = instance.firstname + instance.lastname
+    name = instance.user.first_name + instance.user.last_name
     filename = name +'.'+ ext 
     return 'Faculty_Images/{}'.format(filename)
 
 class Faculty(models.Model):
-
-    user = models.OneToOneField(User, null = True, blank = True, on_delete= models.CASCADE)
-    firstname = models.CharField(max_length=200, null=True, blank=True)
-    lastname = models.CharField(max_length=200, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete= models.CASCADE, primary_key=True)
+    # firstname = models.CharField(max_length=200, null=True, blank=True)
+    # lastname = models.CharField(max_length=200, null=True, blank=True)
     phone = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
     profile_pic = models.ImageField(upload_to=user_directory_path ,null=True, blank=True)
 
     def __str__(self):
-        return str(self.firstname + " " + self.lastname)
+        return str(self.user.first_name + " " + self.user.last_name)
 
 
 def student_directory_path(instance, filename): 
@@ -49,8 +54,9 @@ class Student(models.Model):
         ('A','A'),
         ('B','B'),
     )
-    firstname = models.CharField(max_length=200, null=True, blank=True)
-    lastname = models.CharField(max_length=200, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete= models.CASCADE,primary_key=True)
+    # firstname = models.CharField(max_length=200, null=True, blank=True)
+    # lastname = models.CharField(max_length=200, null=True, blank=True)
     registration_id = models.CharField(max_length=200, null=True)
     # registration_id = models.OneToOneField(User, null = True, on_delete= models.CASCADE)
     branch = models.CharField(max_length=100, null=True, choices=BRANCH)
@@ -58,9 +64,8 @@ class Student(models.Model):
     division = models.CharField(max_length=100, null=True, choices=DIVISION)
     profile_pic = models.ImageField(upload_to=student_directory_path ,null=True, blank=True)
 
+    REQUIRED_FIELDS = ['registration_id','first_name', 'last_name']
 
-
-    # objects = CustomUserManager()
 
     def __str__(self):
         return str(self.registration_id)

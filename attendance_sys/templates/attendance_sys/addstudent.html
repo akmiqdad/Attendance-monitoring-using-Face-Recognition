@@ -1,0 +1,35 @@
+{% extends 'attendance_sys/main.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<section>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card">
+            <div class="card-header text-black">
+              <h2>Add Student</h2>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'add_student' %}" method="POST" novalidate>
+                  {% csrf_token %}
+                     {% for field in form.visible_fields %}
+                       <div class="form-group">
+                           {{ field.label_tag }}
+                              {% render_field field class="form-control" %}
+                                {% for error in field.errors %}
+                                  <span style="color:red">{{ error }}</span>
+                                {% endfor %}
+                     {% endfor %}
+                         <input type="submit" value="Register" class="btn btn-block btn-primary">
+                       </div>
+                </form>
+             </div>
+                </div>   
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+
+{% endblock %}

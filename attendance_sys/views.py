@@ -1,35 +1,75 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, StreamingHttpResponse
 
+from django.views.generic.edit import CreateView
+
 
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-# from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 
 from .forms import *
 from .models import Student, Attendence
 from .filters import AttendenceFilter
 
-# from django.views.decorators import gzip
 
 from .recognizer import Recognizer
 from datetime import date
 
 
-# User = get_user_model()
+User = get_user_model()
 
-# @login_required
-# def index(request):
-#     if request.user.is_faculty:
-#         return render(request, 'attendance_sys/facultyForm.html')
-#     if request.user.is_student:
-#         return render(request, 'attendance_sys/studentForm.html')
-#     return render(request, 'info/logout.html')
+def indexPage(request):
 
-@login_required(login_url='login')
-def home(request):
+    return render(request, 'attendance_sys/index.html')
+
+def facultyLogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('account')
+        else:
+            messages.info(request, 'Username or Password is incorrect')
+
+    context = {}
+    return render(request, 'attendance_sys/facultylogin.html', context)
+
+def studentLogin(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('studenthome')
+        else:
+            messages.info(request, 'Username or Password is incorrect')
+
+    context = {}
+    return render(request, 'attendance_sys/studentlogin.html', context)
+
+@login_required(login_url='facultylogin')
+def logoutUser(request):
+    logout(request)
+    return redirect('index')
+
+@login_required(login_url='studentlogin')
+def logoutUser(request):
+    logout(request)
+    return redirect('index')
+
+
+@login_required(login_url='facultylogin')
+def facultyHome(request):
     studentForm = CreateStudentForm()
 
     if request.method == 'POST':
@@ -44,48 +84,24 @@ def home(request):
         if studentForm.is_valid() and (stat == False):
             studentForm.save()
             name = studentForm.cleaned_data.get(
-                'firstname') + " " + studentForm.cleaned_data.get('lastname')
+                'first_name') + " " + studentForm.cleaned_data.get('last_name')
             messages.success(request, 'Student ' + name +
                              ' was successfully added.')
-            return redirect('home')
+            return redirect('facultyhome')
         else:
             messages.error(request, 'Student with Registration Id ' +
                            request.POST['registration_id']+' already exists.')
-            return redirect('home')
+            return redirect('facultyhome')
 
     context = {'studentForm': studentForm}
-    return render(request, 'attendance_sys/home.html', context)
+    return render(request, 'attendance_sys/facultyhome.html', context)
+
+@login_required(login_url='studentlogin')
+def studentHome(request):
+    return render(request,'attendance_sys/studenthome.html')
 
 
-def indexPage(request):
-
-    return render(request, 'attendance_sys/index.html')
-
-
-def loginPage(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect('account')
-        else:
-            messages.info(request, 'Username or Password is incorrect')
-
-    context = {}
-    return render(request, 'attendance_sys/login.html', context)
-
-
-@login_required(login_url='login')
-def logoutUser(request):
-    logout(request)
-    return redirect('index')
-
-
-@login_required(login_url='login')
+@login_required(login_url='facultylogin')
 def updateStudentRedirect(request):
     context = {}
     if request.method == 'POST':
@@ -99,11 +115,11 @@ def updateStudentRedirect(request):
                        'prev_reg_id': reg_id, 'student': student}
         except:
             messages.error(request, 'Student Not Found')
-            return redirect('home')
-    return render(request, 'attendance_sys/student_update.html', context)
+            return redirect('faculty')
+    return render(request, 'attendance_sys/studentForm.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='studentlogin')
 def updateStudent(request):
     if request.method == 'POST':
         context = {}
@@ -115,11 +131,11 @@ def updateStudent(request):
             if updateStudentForm.is_valid():
                 updateStudentForm.save()
                 messages.success(request, 'Updation Success')
-                return redirect('home')
+                return redirect('faculty')
         except:
             messages.error(request, 'Updation Unsucessfull')
-            return redirect('home')
-    return render(request, 'attendance_sys/studentForm.html', context)
+            return redirect('faculty')
+    return render(request, 'attendance_sys/studentsorm.html', context)
 
 
 @login_required(login_url='login')
@@ -134,7 +150,7 @@ def takeAttendance(request):
         }
         if Attendence.objects.filter(date=str(date.today()), branch=details['branch'], year=details['year'], division=details['division'], period=details['period']).count() != 0:
             messages.error(request, "Attendence already recorded.")
-            return redirect('home')
+            return redirect('faculty')
         else:
             students = Student.objects.filter(
                 branch=details['branch'], year=details['year'], division=details['division'])
@@ -165,7 +181,7 @@ def takeAttendance(request):
             messages.success(request, "Attendence taking Success")
             return render(request, 'attendance_sys/attendence.html', context)
     context = {}
-    return render(request, 'attendance_sys/home.html', context)
+    return render(request, 'attendance_sys/facultyhome.html', context)
 
 
 def searchAttendance(request):
@@ -180,7 +196,7 @@ def facultyProfile(request):
     faculty = request.user.faculty
     form = FacultyForm(instance=faculty)
     context = {'form': form}
-    return render(request, 'attendance_sys/facultyForm.html', context)
+    return render(request, 'attendance_sys/facultyform.html', context)
 
 
 # class VideoCamera(object):
@@ -213,39 +229,12 @@ def facultyProfile(request):
 #     return render(request, 'attendance_sys/videoFeed.html')
 
 
-# @login_required()
-# def add_student(request):
-#     # If the user is not admin, they will be redirected to home
-#     # if not request.user.is_superuser:
-#     #     return redirect("/")
+class add_student(CreateView):
+    model = User
+    form_class = AddStudentForm
+    template_name = 'attendance_sys/addstudent.html'
 
-#     if request.method == 'POST':
-#         # Retrieving all the form data that has been inputted
-#         registration_id = request.POST['registration_id']
-#         firstname = request.POST['firstname']
-#         lastname = request.POST['lastname']
-#         branch = request.POST['branch']
-#         year = request.POST['year']
-#         division = request.POST['division']
-#         profile_pic = request.FILES['profile_pic']
-
-#         user = User.objects.create_user(
-#             username=registration_id,
-#             password=registration_id
-#         )
-#         user.save()
-
-#         # Creating a new student instance with given data and saving it.
-#         Student(
-#             user=user,
-#             registration_id=registration_id,
-#             firstname=firstname,
-#             lastname=lastname,
-#             branch=branch,
-#             year=year,
-#             division=division,
-#             profile_pic=profile_pic,
-#         ).save()
-#         return redirect('/home')
-#     context = {}
-#     return render(request, 'attendance_sys/add_student.html', context)
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('/')

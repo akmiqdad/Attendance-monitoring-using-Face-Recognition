@@ -1,6 +1,7 @@
+{% extends 'attendance_sys/main.html' %}
 {% load static %}
 
-
+{% block content %}
 <style>
   .hello-msg{
     font-size: 18px;
@@ -17,13 +18,13 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item active">
-        <span class="nav-link">Hello, {{ request.user.faculty }}</span>
+        <span class="nav-link">Hello, {{ request.user.last_name }}</span>
       </li>
       <li class="nav-item active">
-        <a href="{% url 'home' %}" class="nav-link">Home</a>
+        <a href="{% url 'studenthome' %}" class="nav-link">Home</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'account' %}">Account</a>
+        <a class="nav-link" href="{% url 'studenthome' %}">Account</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -31,3 +32,5 @@
     </ul>
   </div>
 </nav>
+student home
+{% endblock %}
