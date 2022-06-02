@@ -116,7 +116,7 @@ def updateStudentRedirect(request):
         except:
             messages.error(request, 'Student Not Found')
             return redirect('faculty')
-    return render(request, 'attendance_sys/studentForm.html', context)
+    return render(request, 'attendance_sys/studenthome.html', context)
 
 
 @login_required(login_url='studentlogin')
@@ -131,11 +131,11 @@ def updateStudent(request):
             if updateStudentForm.is_valid():
                 updateStudentForm.save()
                 messages.success(request, 'Updation Success')
-                return redirect('faculty')
+                return redirect('studenthome')
         except:
             messages.error(request, 'Updation Unsucessfull')
-            return redirect('faculty')
-    return render(request, 'attendance_sys/studentsorm.html', context)
+            return redirect('studenthome')
+    return render(request, 'attendance_sys/studentform.html', context)
 
 
 @login_required(login_url='login')
@@ -150,7 +150,7 @@ def takeAttendance(request):
         }
         if Attendence.objects.filter(date=str(date.today()), branch=details['branch'], year=details['year'], division=details['division'], period=details['period']).count() != 0:
             messages.error(request, "Attendence already recorded.")
-            return redirect('faculty')
+            return redirect('facultyhome')
         else:
             students = Student.objects.filter(
                 branch=details['branch'], year=details['year'], division=details['division'])
@@ -179,17 +179,25 @@ def takeAttendance(request):
             )), branch=details['branch'], year=details['year'], division=details['division'], period=details['period'])
             context = {"attendences": attendences, "ta": True}
             messages.success(request, "Attendence taking Success")
-            return render(request, 'attendance_sys/attendence.html', context)
+            return render(request, 'attendance_sys/facultyattendance.html', context)
     context = {}
     return render(request, 'attendance_sys/facultyhome.html', context)
 
 
-def searchAttendance(request):
+def facultyAttendance(request):
     attendences = Attendence.objects.all()
     myFilter = AttendenceFilter(request.GET, queryset=attendences)
     attendences = myFilter.qs
     context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
-    return render(request, 'attendance_sys/attendence.html', context)
+    return render(request, 'attendance_sys/facultyattendance.html', context)
+
+def studentAttendance(request):
+    # attendences = Attendence.objects.all()
+    # myFilter = AttendenceFilter(request.GET, queryset=attendences)
+    # attendences = myFilter.qs
+    # context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
+    # return render(request, 'attendance_sys/facultyattendance.html', context)
+    return render(request, 'attendance_sys/facultyattendance.html')
 
 
 def facultyProfile(request):

@@ -24,6 +24,8 @@ class Faculty(models.Model):
     email = models.CharField(max_length=200, null=True)
     profile_pic = models.ImageField(upload_to=user_directory_path ,null=True, blank=True)
 
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
 
