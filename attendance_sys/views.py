@@ -21,9 +21,11 @@ from datetime import date
 
 User = get_user_model()
 
+
 def indexPage(request):
 
     return render(request, 'attendance_sys/index.html')
+
 
 def facultyLogin(request):
     if request.method == 'POST':
@@ -34,12 +36,13 @@ def facultyLogin(request):
 
         if user is not None:
             login(request, user)
-            return redirect('account')
+            return redirect('facultyhome')
         else:
             messages.info(request, 'Username or Password is incorrect')
 
     context = {}
     return render(request, 'attendance_sys/facultylogin.html', context)
+
 
 def studentLogin(request):
     if request.method == 'POST':
@@ -57,10 +60,12 @@ def studentLogin(request):
     context = {}
     return render(request, 'attendance_sys/studentlogin.html', context)
 
+
 @login_required(login_url='facultylogin')
 def logoutUser(request):
     logout(request)
     return redirect('index')
+
 
 @login_required(login_url='studentlogin')
 def logoutUser(request):
@@ -77,7 +82,8 @@ def facultyHome(request):
         # print(request.POST)
         stat = False
         try:
-            student = Student.objects.get(registration_id=request.POST['registration_id'])
+            student = Student.objects.get(
+                registration_id=request.POST['registration_id'])
             stat = True
         except:
             stat = False
@@ -96,9 +102,10 @@ def facultyHome(request):
     context = {'studentForm': studentForm}
     return render(request, 'attendance_sys/facultyhome.html', context)
 
+
 @login_required(login_url='studentlogin')
 def studentHome(request):
-    return render(request,'attendance_sys/studenthome.html')
+    return render(request, 'attendance_sys/studenthome.html')
 
 
 @login_required(login_url='facultylogin')
@@ -142,6 +149,7 @@ def updateStudent(request):
 def takeAttendance(request):
     if request.method == 'POST':
         details = {
+            'subject': request.POST['subject'],
             'branch': request.POST['branch'],
             'year': request.POST['year'],
             'division': request.POST['division'],
@@ -160,6 +168,7 @@ def takeAttendance(request):
                     attendence = Attendence(Faculty_Name=request.user.faculty,
                                             Student_ID=str(
                                                 student.registration_id),
+                                            subject=details['subject'],
                                             period=details['period'],
                                             branch=details['branch'],
                                             year=details['year'],
@@ -170,13 +179,14 @@ def takeAttendance(request):
                     attendence = Attendence(Faculty_Name=request.user.faculty,
                                             Student_ID=str(
                                                 student.registration_id),
+                                            subject=details['subject'],
                                             period=details['period'],
                                             branch=details['branch'],
                                             year=details['year'],
                                             division=details['division'])
                     attendence.save()
             attendences = Attendence.objects.filter(date=str(date.today(
-            )), branch=details['branch'], year=details['year'], division=details['division'], period=details['period'])
+            )),subject=details['subject'], branch=details['branch'], year=details['year'], division=details['division'], period=details['period'])
             context = {"attendences": attendences, "ta": True}
             messages.success(request, "Attendence taking Success")
             return render(request, 'attendance_sys/facultyattendance.html', context)
@@ -190,6 +200,7 @@ def facultyAttendance(request):
     attendences = myFilter.qs
     context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
     return render(request, 'attendance_sys/facultyattendance.html', context)
+
 
 def studentAttendance(request):
     # attendences = Attendence.objects.all()
