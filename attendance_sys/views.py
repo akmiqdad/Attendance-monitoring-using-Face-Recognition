@@ -122,13 +122,13 @@ def updateStudentRedirect(request):
                        'prev_reg_id': reg_id, 'student': student}
         except:
             messages.error(request, 'Student Not Found')
-            return redirect('faculty')
-    return render(request, 'attendance_sys/studenthome.html', context)
+            return redirect('facultyhome')
+    return render(request, 'attendance_sys/studentform.html', context)
 
 
-@login_required(login_url='studentlogin')
+@login_required(login_url='facultylogin')
 def updateStudent(request):
-    if request.method == 'POST':
+   if request.method == 'POST':
         context = {}
         try:
             student = Student.objects.get(
@@ -138,14 +138,14 @@ def updateStudent(request):
             if updateStudentForm.is_valid():
                 updateStudentForm.save()
                 messages.success(request, 'Updation Success')
-                return redirect('studenthome')
+                return redirect('facultyhome')
         except:
             messages.error(request, 'Updation Unsucessfull')
-            return redirect('studenthome')
-    return render(request, 'attendance_sys/studentform.html', context)
+            return redirect('facultyhome')
+   return render(request, 'attendance_sys/studentform.html', context)
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def takeAttendance(request):
     if request.method == 'POST':
         details = {
@@ -153,8 +153,8 @@ def takeAttendance(request):
             'branch': request.POST['branch'],
             'year': request.POST['year'],
             'division': request.POST['division'],
-            'period': request.POST['period'],
-            'faculty': request.user.faculty
+            'period': request.POST['period']
+            # 'faculty': request.user.faculty
         }
         if Attendence.objects.filter(date=str(date.today()), branch=details['branch'], year=details['year'], division=details['division'], period=details['period']).count() != 0:
             messages.error(request, "Attendence already recorded.")
@@ -165,15 +165,14 @@ def takeAttendance(request):
             names = Recognizer(details)
             for student in students:
                 if str(student.registration_id) in names:
-                    attendence = Attendence(Faculty_Name=request.user.faculty,
-                                            Student_ID=str(
-                                                student.registration_id),
-                                            subject=details['subject'],
-                                            period=details['period'],
-                                            branch=details['branch'],
-                                            year=details['year'],
-                                            division=details['division'],
-                                            status='Present')
+                    attendence = Attendence(Student_ID=str(
+                        student.registration_id),
+                        subject=details['subject'],
+                        period=details['period'],
+                        branch=details['branch'],
+                        year=details['year'],
+                        division=details['division'],
+                        status='Present')
                     attendence.save()
                 else:
                     attendence = Attendence(Faculty_Name=request.user.faculty,
@@ -186,7 +185,7 @@ def takeAttendance(request):
                                             division=details['division'])
                     attendence.save()
             attendences = Attendence.objects.filter(date=str(date.today(
-            )),subject=details['subject'], branch=details['branch'], year=details['year'], division=details['division'], period=details['period'])
+            )), subject=details['subject'], branch=details['branch'], year=details['year'], division=details['division'], period=details['period'])
             context = {"attendences": attendences, "ta": True}
             messages.success(request, "Attendence taking Success")
             return render(request, 'attendance_sys/facultyattendance.html', context)
@@ -203,11 +202,10 @@ def facultyAttendance(request):
 
 
 def studentAttendance(request):
-    # attendences = Attendence.objects.all()
-    # myFilter = AttendenceFilter(request.GET, queryset=attendences)
-    # attendences = myFilter.qs
-    # context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
-    # return render(request, 'attendance_sys/facultyattendance.html', context)
+    attendences = Attendence.objects.all()
+    myFilter = AttendenceFilter(request.GET, queryset=attendences)
+    attendences = myFilter.qs
+    context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
     return render(request, 'attendance_sys/facultyattendance.html')
 
 

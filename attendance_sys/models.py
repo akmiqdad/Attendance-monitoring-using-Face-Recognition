@@ -83,7 +83,7 @@ class Student(models.Model):
 class Attendence(models.Model):
     # faculty = models.ForeignKey(Faculty, null = True, on_delete= models.SET_NULL)
     # student = models.ForeignKey(Student, null = True, on_delete= models.SET_NULL)
-    Faculty_Name = models.CharField(max_length=100, null=True, blank=True)
+    # Faculty_Name = models.CharField(max_length=100, null=True, blank=True)
     Student_ID = models.CharField(max_length=100, null=True, blank=True)
     subject = models.CharField(max_length=100, null=True, blank=True)
     date = models.DateField(auto_now_add=True, null=True)

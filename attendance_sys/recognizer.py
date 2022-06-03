@@ -1,3 +1,4 @@
+from . import controller
 import face_recognition
 import numpy as np
 import cv2
@@ -95,7 +96,7 @@ def Recognizer(details):
 
 		cv2.imshow("Face Recognition Panel",frame)
 
-		if cv2.waitKey(1) == ord('s'):
+		if (cv2.waitKey(1) == ord('s') | cv2.waitKey(300000)):
 			break
 
 	video.release()
