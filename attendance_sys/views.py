@@ -3,7 +3,7 @@ from django.http import HttpResponse, StreamingHttpResponse
 
 from django.views.generic.edit import CreateView
 
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -145,7 +145,6 @@ def updateStudent(request):
    return render(request, 'attendance_sys/studentform.html', context)
 
 
-# @login_required(login_url='login')
 def takeAttendance(request):
     if request.method == 'POST':
         details = {
@@ -154,7 +153,6 @@ def takeAttendance(request):
             'year': request.POST['year'],
             'division': request.POST['division'],
             'period': request.POST['period']
-            # 'faculty': request.user.faculty
         }
         if Attendence.objects.filter(date=str(date.today()), branch=details['branch'], year=details['year'], division=details['division'], period=details['period']).count() != 0:
             messages.error(request, "Attendence already recorded.")
@@ -206,7 +204,7 @@ def studentAttendance(request):
     myFilter = AttendenceFilter(request.GET, queryset=attendences)
     attendences = myFilter.qs
     context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
-    return render(request, 'attendance_sys/facultyattendance.html')
+    return render(request, 'attendance_sys/facultyattendance.html',context)
 
 
 def facultyProfile(request):
@@ -246,7 +244,8 @@ def facultyProfile(request):
 #     return render(request, 'attendance_sys/videoFeed.html')
 
 
-class add_student(CreateView):
+class add_student(LoginRequiredMixin,CreateView):
+    login_url = '/facultylogin'
     model = User
     form_class = AddStudentForm
     template_name = 'attendance_sys/addstudent.html'
@@ -254,4 +253,4 @@ class add_student(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('/')
+        return redirect('/studenthome')

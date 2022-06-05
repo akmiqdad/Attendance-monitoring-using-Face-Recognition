@@ -1,3 +1,4 @@
+from importlib.abc import ExecutionLoader
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
@@ -5,23 +6,25 @@ from django.db import transaction
 from .models import *
 
 class AddStudentForm(UserCreationForm):
+    is_student = True
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     registation_id = forms.CharField(required=True)
     branch = forms.CharField(required=True)
     year = forms.CharField(required=True)
     division = forms.CharField(required=True)
-    profile_pic = forms.ImageField(required=True)
+    profile_pic = forms.FileField(required=True)
 
     class Meta(UserCreationForm.Meta):
         model = User
+        fields = ['username','first_name','last_name','registation_id','branch','year','division','profile_pic']
     
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
-        user.is_student = True
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
+        user.is_student = True
         user.save()
         student = Student.objects.create(user=user)
         student.registation_id=self.cleaned_data.get('registation_id')

@@ -10,7 +10,7 @@
               <h2>Add Student</h2>
             </div>
             <div class="card-body">
-                <form action="{% url 'add_student' %}" method="POST" novalidate>
+                <form action="{% url 'add_student' %}" enctype="multipart/form-data" method="POST" novalidate>
                   {% csrf_token %}
                      {% for field in form.visible_fields %}
                        <div class="form-group">

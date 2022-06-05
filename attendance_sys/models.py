@@ -25,10 +25,10 @@ class Faculty(models.Model):
     # lastname = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=100, null=True)
     email = models.CharField(max_length=100, null=True)
-    profile_pic = models.ImageField(
+    profile_pic = models.FileField(
         upload_to=user_directory_path, null=True, blank=True)
 
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = '__all__'
 
     def __str__(self):
         return str(self.user.first_name + " " + self.user.last_name)
@@ -38,7 +38,7 @@ def student_directory_path(instance, filename):
     name, ext = filename.split(".")
     # + "_" + instance.branch + "_" + instance.year + "_" + instance.division
     name = instance.registration_id
-    filename = name + '.' + ext
+    filename = str(name) + '.' + ext
     return 'Student_Images/{}/{}/{}/{}'.format(instance.branch, instance.year, instance.division, filename)
 
 
