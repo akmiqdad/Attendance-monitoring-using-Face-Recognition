@@ -29,7 +29,7 @@
 		width: 1920px;
 		height: 1080px;
 		background-color: rgba(255,255,255,1);
-		overflow: hidden;
+		overflow: hidden;Chatbot
 		--web-view-name: Web 1920 – 2;
 		--web-view-id: Web_1920__2;
 		--web-scale-on-resize: true;
@@ -158,8 +158,22 @@
 		left: 41px;
 		top: 515px;
 	}
+	#Chatbot {
+		left: 125px;
+		top: 523px;
+		position: absolute;
+		overflow: visible;
+		width: 81px;
+		white-space: nowrap;
+		text-align: left;
+		font-family: Segoe UI;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 22px;
+		color: rgba(0,0,0,1);
+	}
 	#Account {
-		left: 116px;
+		left: 125px;
 		top: 523px;
 		position: absolute;
 		overflow: visible;
@@ -3288,7 +3302,11 @@ window.application = new Application();
 		<rect id="Rectangle_8" rx="25" ry="25" x="0" y="0" width="237" height="50">
 		</rect>
 	</svg>
-	<a href="/account">
+	{% comment %} <a href="/account">
+		<div id="Chatbot">
+			<span>Chatbot</span>
+	</div></a> {% endcomment %}
+	<a href="/facultyform">
 	<div id="Account">
 		<span>Account</span>
 	</div></a>
@@ -3335,7 +3353,7 @@ window.application = new Application();
 		
 	<a href=""><img id="check_up-512_1_ba" src="{% static 'images/card1.png' %}" srcset="{% static 'images/card1.png' %} 1x, {% static 'images/card1@2x.png' %} 2x">
 	
-	<a href="/updateStudentRedirect"><img id="check_up-512_1_bb" src="{% static 'images/card1.png' %}" srcset="{% static 'images/card1.png' %} 1x, {% static 'images/card1@2x.png' %} 2x">
+	<a href="/studentform"><img id="check_up-512_1_bb" src="{% static 'images/card1.png' %}" srcset="{% static 'images/card1.png' %} 1x, {% static 'images/card1@2x.png' %} 2x">
 		
 </div>
 </body>

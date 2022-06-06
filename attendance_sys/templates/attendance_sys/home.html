@@ -1,0 +1,81 @@
+
+
+{% block content %}
+
+<div class="container">
+  {% for message in messages %} {% if message.tags == 'error' %}
+  <div class="alert alert-danger">{{ message }}</div>
+  {% else %}
+  <div class="alert alert-success">{{ message }}</div>
+  {% endif %} {% endfor %}
+  <div class="row">
+    <div class="col-md-6" style="margin-top: 20px">
+      <div class="card card-body">
+        <center><h3>Test Attendence</h3></center>
+        <form
+          class="form-horizontal"
+          action="{% url 'attendance' %}"
+          method="POST"
+        >
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="sel1">Select Branch:</label>
+            <select name="branch" class="form-control" id="sel1">
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+              <option value="ECE">ECE</option>
+              <option value="EEE">EEE</option>
+              <option value="MECH">MECH</option>
+              <option value="CHEM">CHEM</option>
+              <option value="CIVIL">CIVIL</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sel1">Select Year:</label>
+            <select name="year" class="form-control" id="sel1">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sel1">Select Division:</label>
+            <select name="division" class="form-control" id="sel1">
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sel1">Select Period:</label>
+            <select name="period" class="form-control" id="sel1">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sel1">Select subject:</label>
+            <select name="subject" class="form-control" id="sel1">
+              <option value="CG">CG</option>
+              <option value="PP">PP</option>
+              <option value="CSA">CSA</option>
+              <option value="DC">DC</option>
+              <option value="CNS">CNS</option>
+              <option value="DIP">DIP</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-block btn-info">
+            Take Attendence
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

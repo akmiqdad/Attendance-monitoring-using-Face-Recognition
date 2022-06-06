@@ -14,23 +14,21 @@
 <div class="row">
 	<div class="col-md-3">
 		<div class="card card-body">
-			<a class="btn btn-warning" href="{% url 'facultyhome' %}"> &#8592; Back to Home</a>
-			<hr>
-			<h3 style="text-align: center">Profile Pic</h3>
-			<hr>
+			<a class="btn btn-dark" href="{% url 'facultyhome' %}"> Home</a>
+			<br>
 			<img class="img-responsive profile-pic" src="{{request.user.faculty.profile_pic.url}}" >
-			<span class="center">{{ request.user.faculty }}</span>
+			<span class="center">{{ request.user.first_name }} {{ request.user.last_name }}</span>
 		
 		</div>
 	</div>
 	<div class="col-md-9">
 		<div class="card card-body">
 			
-			<form method="POST" action="" enctype="multipart/form-data">
+			<form method="POST" action="{% url 'facultyform' %}" enctype="multipart/form-data">
 				{% csrf_token %}
 				{{form.as_p}}
 		
-			<input class="btn btn-primary" type="submit" name="Update Information">
+			<input class="btn btn-dark" type="submit" name="Update Information">
 			</form>
 		</div>
 	</div>

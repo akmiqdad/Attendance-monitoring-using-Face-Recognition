@@ -1,36 +1,95 @@
 {% extends 'attendance_sys/main.html' %}
-{% load static %}
-
 {% block content %}
-<style>
-  .hello-msg{
-    font-size: 18px;
-    color: #fff;
-    margin-right: 20px;
-  }
-</style>
+{% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% else %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endif %}
+	{% endfor %}
+{% if ta == False %}
+<center><h1>Search Attendance</h1></center>
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
- <!-- <img src="{% static 'images/logo.png' %}" height="50px" width="250px"> -->
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item active">
-        <span class="nav-link">Hello,{{ request.user.first_name }} {{ request.user.last_name }}</span>
-      </li>
-      <li class="nav-item active">
-        <a href="{% url 'studenthome' %}" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'studentform' %}">Account</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-student home
+			<center>
+				<form method="get">
+					{{myFilter.form}}
+
+		    		<button class="btn btn-primary" type="submit">Search</button>
+				</form>
+			</center>
+		</div>
+	</div>
+</div>
+<br>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Date</th>
+					<th>Subject</th>
+					<th>Period</th>
+					<th>Status</th>
+				</tr>
+
+				{% for attendence in attendences %}
+
+				<tr>
+					<td>{{ attendence.date }}</td>
+					<td>{{ attendence.subject }}</td>
+					<td>{{ attendence.period }}</td>
+					<td>{{ attendence.status }}</td>
+				</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+{% else %}
+	<center><h1>Present Period Attendence</h1></center>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="card card-body">
+				<table class="table table-sm">
+					<tr>
+						<th>Date</th>
+						<th>Student ID</th>
+						<th>Subject</th>
+						<th>Branch</th>
+						<th>Year</th>
+						<th>Division</th>
+						<th>Period</th>
+						<th>Status</th>
+					</tr>
+	
+					{% for attendence in attendences %}
+	
+					<tr>
+						<td>{{ attendence.date }}</td>
+						<td>{{ attendence.Student_ID }}</td>
+						<td>{{ attendence.subject }}</td>
+						<td>{{ attendence.branch }}</td>
+						<td>{{ attendence.year }}</td>
+						<td>{{ attendence.division }}</td>
+						<td>{{ attendence.period }}</td>
+						<td>{{ attendence.status }}</td>
+					</tr>
+					{% endfor %}
+	
+				</table>
+			</div>
+		</div>
+	</div>
+{% endif %}
+
+
 {% endblock %}

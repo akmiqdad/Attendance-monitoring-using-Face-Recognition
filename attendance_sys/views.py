@@ -1,22 +1,21 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, StreamingHttpResponse
 
 from django.views.generic.edit import CreateView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
 from .forms import *
 from .models import Student, Attendence
-from .filters import AttendenceFilter
+from .filters import AttendenceFilter,StudentAttendenceFilter
 
 
 from .recognizer import Recognizer
 from datetime import date
+# from ..recScheduler.controller import control
 
 
 User = get_user_model()
@@ -108,8 +107,8 @@ def studentHome(request):
     return render(request, 'attendance_sys/studenthome.html')
 
 
-@login_required(login_url='facultylogin')
-def updateStudentRedirect(request):
+@login_required
+def studentProfile(request):
     context = {}
     if request.method == 'POST':
         try:
@@ -126,26 +125,15 @@ def updateStudentRedirect(request):
     return render(request, 'attendance_sys/studentform.html', context)
 
 
-@login_required(login_url='facultylogin')
-def updateStudent(request):
-   if request.method == 'POST':
-        context = {}
-        try:
-            student = Student.objects.get(
-                registration_id=request.POST['prev_reg_id'])
-            updateStudentForm = CreateStudentForm(
-                data=request.POST, files=request.FILES, instance=student)
-            if updateStudentForm.is_valid():
-                updateStudentForm.save()
-                messages.success(request, 'Updation Success')
-                return redirect('facultyhome')
-        except:
-            messages.error(request, 'Updation Unsucessfull')
-            return redirect('facultyhome')
-   return render(request, 'attendance_sys/studentform.html', context)
+@login_required(login_url='stuentlogin')
+def studentForm(request):
+    student = request.user.student
+    form = StudentForm(instance=student)
+    context = {'form': form}
+    return render(request, 'attendance_sys/studentform.html', context)
 
 
-def takeAttendance(request):
+def testAttendance(request):
     if request.method == 'POST':
         details = {
             'subject': request.POST['subject'],
@@ -173,8 +161,7 @@ def takeAttendance(request):
                         status='Present')
                     attendence.save()
                 else:
-                    attendence = Attendence(Faculty_Name=request.user.faculty,
-                                            Student_ID=str(
+                    attendence = Attendence(Student_ID=str(
                                                 student.registration_id),
                                             subject=details['subject'],
                                             period=details['period'],
@@ -188,9 +175,9 @@ def takeAttendance(request):
             messages.success(request, "Attendence taking Success")
             return render(request, 'attendance_sys/facultyattendance.html', context)
     context = {}
-    return render(request, 'attendance_sys/facultyhome.html', context)
+    return render(request, 'attendance_sys/home.html', context)
 
-
+@login_required(login_url="/facultylogin")
 def facultyAttendance(request):
     attendences = Attendence.objects.all()
     myFilter = AttendenceFilter(request.GET, queryset=attendences)
@@ -198,15 +185,15 @@ def facultyAttendance(request):
     context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
     return render(request, 'attendance_sys/facultyattendance.html', context)
 
-
+@login_required(login_url="/studentlogin")
 def studentAttendance(request):
-    attendences = Attendence.objects.all()
-    myFilter = AttendenceFilter(request.GET, queryset=attendences)
+    attendences = Attendence.objects.filter(Student_ID=request.user.username)
+    myFilter = StudentAttendenceFilter(request.GET, queryset=attendences)
     attendences = myFilter.qs
     context = {'myFilter': myFilter, 'attendences': attendences, 'ta': False}
-    return render(request, 'attendance_sys/facultyattendance.html',context)
+    return render(request, 'attendance_sys/studentattendance.html',context)
 
-
+@login_required(login_url="/facultylogin")
 def facultyProfile(request):
     faculty = request.user.faculty
     form = FacultyForm(instance=faculty)
