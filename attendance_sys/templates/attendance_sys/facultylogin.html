@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
-    
-<head>
-	<title>Login</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+{%  extends 'attendance_sys/main.html' %}
+{% load static %}
+{% block content %}	
+	
 	<style>
 		body,
 		html {
@@ -75,6 +70,13 @@
 
 </head>
 <body>
+	<div>
+		<nav class="navbar navbar-light navbar-expand-md sticky-top navigation-clean-button"
+			style="height:80px;background-color:#37434d;color:#ffffff;">
+			<div class="container-fluid"><a class="navbar-brand" href="#"><img src="{% static 'assets/img/logo.png' %}"
+						style="height: 80px;width: 85px;margin-left: 20px;"></a></div>
+		</nav>
+	</div>
 	<div class="container h-100">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
@@ -124,6 +126,5 @@
 	</div>
 </body>
 
-</html>
 
-
+{% endblock %}
