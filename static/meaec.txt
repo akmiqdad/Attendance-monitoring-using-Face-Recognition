@@ -1,0 +1,47 @@
+- MEA Engineering College:
+the first NAAC accredited self-financing engineering college in Malappuram district
+The College is easily accessible by road, rail and air.
+The institution is affiliated to the APJ Abdul Kalam Technological University and approved by the AICTE.
+
+- offers=["1.ME","
+  2.CE","
+  3.IT","
+  4.CSE",
+"  5.EEE",
+"  6.ECE"]
+  
+
+
+
+
+- Total strength of various courses or departments for BE are:
+  1.mechanical   - 60
+  2.Civil        - 90
+  3.IT           - 30
+  4.Computer     - 90
+  5.ECE      - 30
+  6.Electrical   - 30
+
+
+
+
+
+
+
+ 
+- Scholarship Provided by Government of India:
+1.Special Quota
+2.SC/ST/ OBC Students Scholarship
+3.Differently abled
+4.For Women
+5.EBC Scholarship
+6.Minority Community
+7.EWS Scholarship
+8.TFWS Scholarship.
+
+
+
+
+
+
+					

@@ -14,6 +14,7 @@ from .filters import AttendenceFilter,StudentAttendenceFilter
 
 
 from .recognizer import Recognizer
+from .chatbot import get_bot_response
 from datetime import date
 # from ..recScheduler.controller import control
 
@@ -101,6 +102,12 @@ def facultyHome(request):
     context = {'studentForm': studentForm}
     return render(request, 'attendance_sys/facultyhome.html', context)
 
+
+@login_required()
+def chatBot(request):
+    msg= request.POST['msg']
+    get_bot_response(msg)
+    return render(request, 'attendance_sys/chatbot.html',{'msg':msg})
 
 @login_required(login_url='studentlogin')
 def studentHome(request):

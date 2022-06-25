@@ -11,8 +11,10 @@ this project, we are aimed to implement an online chatbot system to assist users
 queries without consuming time.
 
 **Django** web framework was used for the development of the whole web app. **OpenCv and face_recognition API's** were used for the development of Face Recognizer. The Face Recognizer can detect multiple faces at a time and mark their attendance into Database.
+
 **Note: Python version 3.7 was used for this project. And the dlib package required for installation of face_recognition api.**
-To run the web app on your local computer, install the required libraries([requirements.txt](https://github.com/venugopalkadamba/Face_Verification_based_Attendance_system/blob/master/requirements.txt)) using the command:
+
+To run the web app on your local computer, install the required libraries([requirements.txt](https://github.com/akmiqdad/fyp22/blob/main/requirements.txt)) using the command:
 
 ```python
 pip3 install -r requirements.txt
