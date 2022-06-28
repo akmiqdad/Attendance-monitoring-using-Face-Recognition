@@ -1,13 +1,26 @@
 {% extends 'attendance_sys/main.html' %}
 {% load widget_tweaks %}
+{% load static %}
 {% block content %}
+<div>
+	<nav class="navbar navbar-light navbar-expand-md sticky-top navigation-clean-button"
+		style="height: 80px; background-color: #37434d; color: #ffffff">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#"><img src="{% static 'assets/img/logo.png' %}"
+					style="width: 85px; height: 80px; margin-left: 20px" /></a>
+          <li class="nav-item" style="list-style: none">
+            <a class="nav-link" href="{% url 'facultyhome' %}" style="color: white"><i class="fa fa-home"
+                style="color: white"></i><span> Home</span></a></li>
+		</div>
+	</nav>
+</div>
 <section>
     <div class="container">
       <div class="row">
         <div class="col-md-6 mx-auto">
           <div class="card">
-            <div class="card-header text-black">
-              <h2>Add Student</h2>
+            <div class="p-3 text-black">
+              <h2 class="text-center">Student Registration</h2>
             </div>
             <div class="card-body">
                 <form action="{% url 'add_student' %}" enctype="multipart/form-data" method="POST" novalidate>
@@ -20,7 +33,7 @@
                                   <span style="color:red">{{ error }}</span>
                                 {% endfor %}
                      {% endfor %}
-                         <input type="submit" value="Register" class="btn btn-block btn-primary">
+                         <input type="submit" value="Register" class="btn btn-block btn-dark">
                        </div>
                 </form>
              </div>

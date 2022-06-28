@@ -1,37 +1,79 @@
-{%  extends 'attendance_sys/main.html' %}
-{% block content %}
+{% extends 'attendance_sys/main.html' %}
+{% load static %}
+{% block content%}
+<div>
+  <nav class="navbar navbar-light navbar-expand-md sticky-top navigation-clean-button"
+    style="height: 80px; background-color: #37434d; color: #ffffff">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="{% static 'assets/img/logo.png' %}"
+          style="width: 85px; height: 80px; margin-left: 20px" /></a>
+    </div>
+  </nav>
+</div>
+<div id="wrapper">
+  <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="
+          background: rgb(255, 255, 255);
+          border-right: 1px solid rgb(55, 67, 77);
+        ">
+    <div class="container-fluid d-flex flex-column p-0">
+      <div style="width: 197; height: 197; margin-bottom: 5px">
+        <div>
+          <img src="{{request.user.faculty.profile_pic.url}}" style="
+                  border-radius: 100px;
+                  border: 1px solid rgb(55, 67, 77);
+                  margin-top: 30px;
+                  margin-left: 0px;
+                  width: 197px;
+                  height: 197px;
+                " />
+        </div>
+        <div style="text-align: center; padding-top: 10px">
+          <span style="color: rgb(55, 67, 77); font-size: 18px">{{request.user.first_name}}
+            {{request.user.last_name}}</span>
+        </div>
+      </div>
+      <ul class="navbar-nav text-light" id="accordionSidebar">
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'chatbot' %}" style="color: #37434d"><i class="fas fa-robot"
+              style="color: rgb(55, 67, 77)"></i><span>Chatbot</span></a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'facultyhome' %}" style="color: #37434d"><i class="fa fa-home"
+              style="color: #37434d"></i><span>Home</span></a><a class="nav-link" href="/facultyform"
+            style="color: #37434d"><i class="fas fa-user" style="color: #37434d"></i><span>Account</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout" style="color: #37434d"><i class="fas fa-sign-out-alt" style="color: #37434d"></i><span>Logout</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-<style>
-	.profile-pic{
-		max-width: 200px;
-		max-height:200px;
-		margin: 0 auto;
-		border-radius: 50%;
-	}
-</style>
 
-<br>
-<div class="row">
-	<div class="col-md-3">
-		<div class="card card-body">
-			<a class="btn btn-dark" href="{% url 'studenthome' %}">  Home</a>
-			<br>
-			<img class="img-responsive profile-pic" src="{{request.user.student.profile_pic.url}}" >
-			<span class="center">{{ request.user.first_name }} {{ request.user.last_name }}</span>
-		
+<div class="col-md-9 p-3">
+	<div class="card card-body">
+	{% comment %} {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% else %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %} {% endcomment %}
+	<form action="{% url 'studentform' %}" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="form-group" style="visibility: hidden !important;margin-top: -40px;">
+			<input type="text" class="form-control" value="{{ prev_reg_id }}" name="prev_reg_id">
 		</div>
-	</div>
-	<div class="col-md-9">
-		<div class="card card-body">
-			
-			<form method="POST" action="{% url 'studentform' %}" enctype="multipart/form-data">
-				{% csrf_token %}
-				{{form.as_p}}
-		
-			<input class="btn btn-dark" type="submit" name="Update Information">
-			</form>
-		</div>
-	</div>
+		{{ form.as_p }}
+		<input class="btn btn-primary" type="submit" name="Update Information">
+	</form>
+</div>
+</div>
 </div>
 
 

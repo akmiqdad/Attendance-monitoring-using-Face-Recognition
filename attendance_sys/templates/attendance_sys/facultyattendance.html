@@ -1,5 +1,19 @@
 {% extends 'attendance_sys/main.html' %}
+{% load static %}
 {% block content %}
+<div>
+	<nav class="navbar navbar-light navbar-expand-md sticky-top navigation-clean-button"
+		style="height: 80px; background-color: #37434d; color: #ffffff">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#"><img src="{% static 'assets/img/logo.png' %}"
+					style="width: 85px; height: 80px; margin-left: 20px" /></a>
+					<li class="nav-item" style="list-style: none">
+					<a class="nav-link" href="{% url 'facultyhome' %}" style="color: white"><i class="fa fa-home"
+							style="color: white"></i><span> Home</span></a></li>
+		</div>
+	</nav>
+</div>
+
 {% for message in messages %}
         {% if message.tags == 'error' %}
             <div class="alert alert-danger">
@@ -12,16 +26,16 @@
         {% endif %}
 	{% endfor %}
 {% if ta == False %}
-<center><h1>Search Attendence</h1></center>
+<center><h1 class="text-dark">Search Attendance</h1></center>
 <div class="row">
 	<div class="col">
-		<div class="card card-body">
+		<div class="text-dark card card-body">
 
 			<center>
-				<form method="get">
+				<form  method="get">
 					{{myFilter.form}}
 
-		    		<button class="btn btn-primary" type="submit">Search</button>
+		    		<button class="btn btn-dark" type="submit">Search</button>
 				</form>
 			</center>
 		</div>
@@ -31,7 +45,7 @@
 
 <div class="row">
 	<div class="col-sm-12">
-		<div class="card card-body">
+		<div class="text-dark card card-body">
 			<table class="table table-sm">
 				<tr>
 					<th>Date</th>
@@ -63,10 +77,10 @@
 	</div>
 </div>
 {% else %}
-	<center><h1>Present Period Attendence</h1></center>
+	<center><h1 class="text-dark">Present Period Attendance</h1></center>
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="card card-body">
+			<div class="text-dark card card-body">
 				<table class="table table-sm">
 					<tr>
 						<th>Date</th>
@@ -100,4 +114,5 @@
 {% endif %}
 
 
+</div>
 {% endblock %}

@@ -14,9 +14,9 @@ urlpatterns = [
     path('student_attendance/', views.studentAttendance, name='studentattendance'),
     path('facultyform/', views.facultyProfile, name='facultyform'),
     path('chatbot/', views.chatBot, name='chatbot'),
-
-    path('studentprofile/', views.studentForm, name='studentform'),
-    path('studentForm/', views.studentProfile, name='studentprofile'),
+    path('updateStudentRedirect/', views.updateStudentRedirect, name='updateStudentRedirect'),
+    path('studentprofile/', views.studentProfile, name='studentprofile'),
+    path('studentForm/', views.studentForm, name='studentform'),
     path('attendance/', views.testAttendance, name='attendance'),
     path('addStudent/', views.add_student.as_view(), name='add_student'),
     # path('video_feed/', views.videoFeed, name='video_feed'),

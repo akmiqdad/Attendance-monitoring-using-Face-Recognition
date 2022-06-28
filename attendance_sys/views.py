@@ -113,31 +113,46 @@ def chatBot(request):
 def studentHome(request):
     return render(request, 'attendance_sys/studenthome.html')
 
-
-@login_required
-def studentProfile(request):
+@login_required(login_url = 'facultylogin')
+def updateStudentRedirect(request):
     context = {}
     if request.method == 'POST':
         try:
             reg_id = request.POST['reg_id']
             branch = request.POST['branch']
-            student = Student.objects.get(
-                registration_id=reg_id, branch=branch)
+            student = Student.objects.get(registration_id = reg_id, branch = branch)
             updateStudentForm = CreateStudentForm(instance=student)
-            context = {'form': updateStudentForm,
-                       'prev_reg_id': reg_id, 'student': student}
+            context = {'form':updateStudentForm, 'prev_reg_id':reg_id, 'student':student}
         except:
             messages.error(request, 'Student Not Found')
             return redirect('facultyhome')
     return render(request, 'attendance_sys/studentform.html', context)
 
 
-@login_required(login_url='stuentlogin')
+@login_required(login_url='facultylogin')
 def studentForm(request):
+    if request.method == 'POST':
+        context = {}
+        try:
+            student = Student.objects.get(registration_id = request.POST['prev_reg_id'])
+            updateStudentForm = CreateStudentForm(data = request.POST, files=request.FILES, instance = student)
+            if updateStudentForm.is_valid():
+                updateStudentForm.save()
+                messages.success(request, 'Updation Success')
+                return redirect('home')
+        except:
+            messages.error(request, 'Updation Unsucessfull')
+            return redirect('facultyhome')
+    return render(request, 'attendance_sys/studentForm.html', context)
+
+
+
+@login_required(login_url='studentlogin')
+def studentProfile(request):
     student = request.user.student
     form = StudentForm(instance=student)
     context = {'form': form}
-    return render(request, 'attendance_sys/studentform.html', context)
+    return render(request, 'attendance_sys/studentprofile.html', context)
 
 
 def testAttendance(request):

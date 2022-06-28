@@ -1,6 +1,7 @@
-{% extends 'attendance_sys/main.html' %}
+{%  extends 'attendance_sys/main.html' %}
 {% load static %}
-{% block content%}
+{% block content %}
+
 <div>
 	<nav class="navbar navbar-light navbar-expand-md sticky-top navigation-clean-button"
 		style="height: 80px; background-color: #37434d; color: #ffffff">
@@ -51,52 +52,21 @@
 			</ul>
 		</div>
 	</nav>
-	<div class="d-flex flex-column" id="content-wrapper">
-		<div id="content" style="height: 660px; color: #ffffff">
-			<div class="container-fluid">
-				<div class="row" style="margin-top: 20px">
-					<div class="col-md-6 col-xl-3 mb-4">
-						<div class="card shadow border-start-primary py-2">
-							<a href="{% url 'studentattendance' %}">
-							<div class="card-body">
-								<div style="text-align: center">
-									<img src="{% static 'images/card1.png' %}" />
-								</div>
-								<div class="row align-items-center no-gutters">
-									<div class="col">
-										<div class="text-uppercase text-primary fw-bold text-xs mb-1"
-											style="text-align: center">
-											<span>View attendance</span>
-										</div>
-									</div>
-								</div>
-							</div></a>
-						</div>
-					</div>
-					<div class="col-md-6 col-xl-3 mb-4">
-						<div class="card shadow border-start-primary py-2">
-							<a href="">
-							<div class="card-body">
-								<div style="text-align: center">
-									<img src="{% static 'images/card1.png' %}" />
-								</div>
-								<div class="row align-items-center no-gutters">
-									<div class="col">
-										<div class="text-uppercase text-primary fw-bold text-xs mb-1"
-											style="text-align: center">
-											<span>Manage attendance</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</a>
-						</div>
-					</div>
-					
-					
-				</div>
-			</div>
+<br>
+
+	<div class="col-md-9 p-3">
+		<div class="card card-body">
+			
+			<form method="POST" action="{% url 'studentform' %}" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{form.as_p}}
+		
+			<input class="btn btn-dark" type="submit" name="Update Information">
+			</form>
 		</div>
 	</div>
 </div>
+
+
+
 {% endblock %}

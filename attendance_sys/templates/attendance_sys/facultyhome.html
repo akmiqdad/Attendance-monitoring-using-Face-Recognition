@@ -34,18 +34,17 @@
       </div>
       <ul class="navbar-nav text-light" id="accordionSidebar">
         <li class="nav-item">
-          <a class="nav-link active" href="../chatbot" style="color: #37434d"><i class="fas fa-robot"
+          <a class="nav-link active" href="{% url 'chatbot' %}" style="color: #37434d"><i class="fas fa-robot"
               style="color: rgb(55, 67, 77)"></i><span>Chatbot</span></a>
         </li>
-        <li class="nav-item"></li>
+        
         <li class="nav-item">
-          <a class="nav-link" href="/facultyhome" style="color: #37434d"><i class="fa fa-home"
+          <a class="nav-link" href="{% url 'facultyhome' %}" style="color: #37434d"><i class="fa fa-home"
               style="color: #37434d"></i><span>Home</span></a><a class="nav-link" href="/facultyform"
             style="color: #37434d"><i class="fas fa-user" style="color: #37434d"></i><span>Account</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/logout" style="color: #37434d"><i class="fa fa-sign-out"
-              style="color: #37434d"></i><span>Logout</span></a>
+          <a class="nav-link" href="/logout" style="color: #37434d"><i class="fas fa-sign-out-alt" style="color: #37434d"></i><span>Logout</span></a>
         </li>
       </ul>
     </div>
@@ -56,6 +55,7 @@
         <div class="row" style="margin-top: 20px">
           <div class="col-md-6 col-xl-3 mb-4">
             <div class="card shadow border-start-primary py-2">
+              <a href="{% url 'facultyattendance' %}">
               <div class="card-body">
                 <div style="text-align: center">
                   <img style="width: 75px;height:75px" src="{% static 'images/card1.png' %}" />
@@ -67,11 +67,12 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div></a>
             </div>
           </div>
           <div class="col-md-6 col-xl-3 mb-4">
             <div class="card shadow border-start-primary py-2">
+              <a href="">
               <div class="card-body">
                 <div style="text-align: center">
                   <img style="width: 75px;height:75px" src="{% static 'images/card1.png' %}" />
@@ -83,11 +84,12 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div></a>
             </div>
           </div>
           <div class="col-md-6 col-xl-3 mb-4">
             <div class="card shadow border-start-primary py-2">
+              <a href="{% url 'add_student' %}">
               <div class="card-body">
                 <div style="text-align: center">
                   <img style="width: 75px;height:75px" src="{% static 'images/card1.png' %}" />
@@ -99,11 +101,14 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div></a>
             </div>
           </div>
           <div class="col-md-6 col-xl-3 mb-4">
             <div class="card shadow border-start-primary py-2">
+              <button type="button" data-toggle="modal" data-target="#exampleModal" style="
+              background-color: transparent;
+              border: transparent;">
               <div class="card-body">
                 <div style="text-align: center">
                   <img style="width: 75px;height:75px" src="{% static 'images/card1.png' %}" />
@@ -115,12 +120,65 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div></button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Student Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {% comment %} {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% else %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %} {% endcomment %}
+      </div>
+      <div class="modal-body">
+        
+          <div class="card card-body">
+              <form class="form-horizontal" action="{% url 'updateStudentRedirect' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label class="control-label">Enter Registration ID:</label>
+                      <input name="reg_id" type="text" class="form-control" placeholder="18gcs99">
+                  </div>
+                  <div class="form-group">
+                      <label for="sel1">Select Branch:</label>
+                      <select name='branch' class="form-control" id="sel1">
+                          <option value="CSE">CSE</option>
+                          <option value="IT">IT</option>
+                          <option value="ECE">ECE</option>
+                          <option value="EEE">EEE</option>
+                          <option value="MECH">MECH</option>
+                          <option value="CHEM">CHEM</option>
+                          <option value="CIVIL">CIVIL</option>
+                      </select>
+                  </div>
+                  <button type="submit" class="btn btn-block btn-info">Submit</button>
+              </form>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </div>
 {% endblock %}

@@ -780,19 +780,11 @@ progress {
   --bs-gutter-y: 3rem;
 }
 .table {
-  --bs-table-bg: transparent;
-  --bs-table-accent-bg: transparent;
-  --bs-table-striped-color: #858796;
-  --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
-  --bs-table-active-color: #858796;
-  --bs-table-active-bg: rgba(0, 0, 0, 0.1);
-  --bs-table-hover-color: #858796;
-  --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+
   width: 100%;
   margin-bottom: 1rem;
-  color: #858796;
   vertical-align: top;
-  border-color: #e3e6f0;
+  border-color: #616264;
 }
 .table > :not(caption) > * > * {
   padding: 0.5rem;

@@ -13,4 +13,4 @@ class AttendenceFilter(django_filters.FilterSet):
 class StudentAttendenceFilter(django_filters.FilterSet):
     class Meta:
         model = Attendence
-        fields = ['subject','date']
+        fields = ['subject','date','status']
