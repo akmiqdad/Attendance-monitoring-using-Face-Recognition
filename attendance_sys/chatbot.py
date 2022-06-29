@@ -113,8 +113,4 @@ def response(user_response):
         return robo_response
 
 
-def get_bot_response(msg):
-    userText = msg  # get data from input,we write js  to index.html
-    s = response(userText)
-    sent_tokens.remove(userText)
-    return str(s)
+

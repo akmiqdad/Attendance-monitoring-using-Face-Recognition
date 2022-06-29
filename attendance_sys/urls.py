@@ -14,6 +14,7 @@ urlpatterns = [
     path('student_attendance/', views.studentAttendance, name='studentattendance'),
     path('facultyform/', views.facultyProfile, name='facultyform'),
     path('chatbot/', views.chatBot, name='chatbot'),
+    path('chatbotresponse/', views.chatBotResponse, name='chatbotresponse'),
     path('updateStudentRedirect/', views.updateStudentRedirect, name='updateStudentRedirect'),
     path('studentprofile/', views.studentProfile, name='studentprofile'),
     path('studentForm/', views.studentForm, name='studentform'),

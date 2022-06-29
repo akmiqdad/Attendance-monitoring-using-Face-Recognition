@@ -1,7 +1,8 @@
+from multiprocessing import context
 from django.shortcuts import render, redirect
 
 from django.views.generic.edit import CreateView
-
+from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -14,7 +15,7 @@ from .filters import AttendenceFilter,StudentAttendenceFilter
 
 
 from .recognizer import Recognizer
-from .chatbot import get_bot_response
+from .chatbot import response,sent_tokens
 from datetime import date
 # from ..recScheduler.controller import control
 
@@ -75,39 +76,23 @@ def logoutUser(request):
 
 @login_required(login_url='facultylogin')
 def facultyHome(request):
-    studentForm = CreateStudentForm()
-
-    if request.method == 'POST':
-        studentForm = CreateStudentForm(data=request.POST, files=request.FILES)
-        # print(request.POST)
-        stat = False
-        try:
-            student = Student.objects.get(
-                registration_id=request.POST['registration_id'])
-            stat = True
-        except:
-            stat = False
-        if studentForm.is_valid() and (stat == False):
-            studentForm.save()
-            name = studentForm.cleaned_data.get(
-                'first_name') + " " + studentForm.cleaned_data.get('last_name')
-            messages.success(request, 'Student ' + name +
-                             ' was successfully added.')
-            return redirect('facultyhome')
-        else:
-            messages.error(request, 'Student with Registration Id ' +
-                           request.POST['registration_id']+' already exists.')
-            return redirect('facultyhome')
-
-    context = {'studentForm': studentForm}
-    return render(request, 'attendance_sys/facultyhome.html', context)
+    return render(request, 'attendance_sys/facultyhome.html')
 
 
 @login_required()
 def chatBot(request):
-    msg= request.POST['msg']
-    get_bot_response(msg)
-    return render(request, 'attendance_sys/chatbot.html',{'msg':msg})
+    return render(request, 'attendance_sys/chatbot.html')
+
+@login_required()
+def chatBotResponse(request):
+    print(request)
+    if request.method == 'GET':
+        userText=request.GET["msg"]
+        s = response(userText)
+        sent_tokens.remove(userText)
+        data=str(s)
+        return HttpResponse(data)
+
 
 @login_required(login_url='studentlogin')
 def studentHome(request):

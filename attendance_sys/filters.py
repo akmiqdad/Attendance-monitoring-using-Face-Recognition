@@ -1,6 +1,5 @@
 from webbrowser import get
 import django_filters
-from numpy import greater
 
 from .models import Attendence
 
